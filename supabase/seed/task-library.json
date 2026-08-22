@@ -1,0 +1,876 @@
+{
+ "version": "0.3",
+ "tasks": [
+  {
+   "task_id": "G-01",
+   "name": "Truck dump, cases staged in the room",
+   "trigger": "Always",
+   "lead": null,
+   "phase": "Both",
+   "depends_on": [],
+   "note": "Everyone. Nothing else starts until this is done."
+  },
+  {
+   "task_id": "G-02",
+   "name": "Room walk with the venue contact",
+   "trigger": "Always",
+   "lead": "PM",
+   "phase": "Load-in",
+   "depends_on": [
+    "G-01"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "G-03",
+   "name": "Mark stage, FOH and video village from the plot",
+   "trigger": "Always",
+   "lead": "PM",
+   "phase": "Load-in",
+   "depends_on": [
+    "G-02"
+   ],
+   "note": "Marking first saves moving a deck later."
+  },
+  {
+   "task_id": "G-04",
+   "name": "Dead cases to storage",
+   "trigger": "Always",
+   "lead": null,
+   "phase": "Both",
+   "depends_on": [
+    "G-01"
+   ],
+   "note": "From the walkthrough answer. No answer means a hallway."
+  },
+  {
+   "task_id": "G-05",
+   "name": "Crew meal break",
+   "trigger": "Always",
+   "lead": "PM",
+   "phase": "Both",
+   "depends_on": [],
+   "note": "Sits in the schedule so it does not get skipped."
+  },
+  {
+   "task_id": "G-06",
+   "name": "Safety walk \u2014 cable, ramps, edges, exits",
+   "trigger": "Always",
+   "lead": "PM",
+   "phase": "Load-in",
+   "depends_on": [],
+   "note": " Before doors, every show."
+  },
+  {
+   "task_id": "G-07",
+   "name": "Client walkthrough and sign-off",
+   "trigger": "Always",
+   "lead": "PM",
+   "phase": "Load-in",
+   "depends_on": [
+    "G-06"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "G-08",
+   "name": "Trash, sweep and venue handback",
+   "trigger": "Always",
+   "lead": null,
+   "phase": "Load-out",
+   "depends_on": [],
+   "note": null
+  },
+  {
+   "task_id": "G-09",
+   "name": "Truck load and strap",
+   "trigger": "Always",
+   "lead": null,
+   "phase": "Load-out",
+   "depends_on": [
+    "G-08"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "P-01",
+   "name": "Confirm panel and drops with the house electrician",
+   "trigger": "Power / Generator",
+   "lead": "PM",
+   "phase": "Load-in",
+   "depends_on": [
+    "G-02"
+   ],
+   "note": "Walkthrough photo of the panel is the reference."
+  },
+  {
+   "task_id": "P-02",
+   "name": "Generator spot, grounding rod and fuelling",
+   "trigger": "Power / Generator",
+   "lead": "PM",
+   "phase": "Load-in",
+   "depends_on": [],
+   "note": "Rod location must already be approved in writing."
+  },
+  {
+   "task_id": "P-03",
+   "name": "Distro build and feeder runs to each department",
+   "trigger": "Power / Generator",
+   "lead": null,
+   "phase": "Load-in",
+   "depends_on": [
+    "P-01"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "P-04",
+   "name": "Power up and load check per department",
+   "trigger": "Power / Generator",
+   "lead": null,
+   "phase": "Load-in",
+   "depends_on": [
+    "P-03"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "P-05",
+   "name": "Vendor tie-ins",
+   "trigger": "Power / Generator",
+   "lead": "PM",
+   "phase": "Load-in",
+   "depends_on": [
+    "P-04"
+   ],
+   "note": "Only if other vendors are drawing from us."
+  },
+  {
+   "task_id": "P-06",
+   "name": "Power down, distro and feeder strike",
+   "trigger": "Power / Generator",
+   "lead": null,
+   "phase": "Load-out",
+   "depends_on": [],
+   "note": "Last department out."
+  },
+  {
+   "task_id": "R-01",
+   "name": "Confirm rig points against the plot",
+   "trigger": "Rigging / Truss",
+   "lead": "RIG",
+   "phase": "Load-in",
+   "depends_on": [
+    "G-03"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "R-02",
+   "name": "Motors and chain set out",
+   "trigger": "Rigging / Truss",
+   "lead": "RIG",
+   "phase": "Load-in",
+   "depends_on": [
+    "R-01"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "R-03",
+   "name": "Truss build on deck",
+   "trigger": "Rigging / Truss",
+   "lead": "RIG",
+   "phase": "Load-in",
+   "depends_on": [
+    "R-02"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "R-04",
+   "name": "Department load onto truss",
+   "trigger": "Rigging / Truss",
+   "lead": null,
+   "phase": "Load-in",
+   "depends_on": [
+    "R-03"
+   ],
+   "note": "Lighting and video hang their own. Rigger supervises."
+  },
+  {
+   "task_id": "R-05",
+   "name": "Trim check and lift to height",
+   "trigger": "Rigging / Truss",
+   "lead": "RIG",
+   "phase": "Load-in",
+   "depends_on": [
+    "R-04"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "R-06",
+   "name": "Secondaries, safeties and sign-off",
+   "trigger": "Rigging / Truss",
+   "lead": "RIG",
+   "phase": "Load-in",
+   "depends_on": [
+    "R-05"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "R-07",
+   "name": "Lower, strip truss, pack motors",
+   "trigger": "Rigging / Truss",
+   "lead": "RIG",
+   "phase": "Load-out",
+   "depends_on": [],
+   "note": "First real load-out task. Everything hangs off it."
+  },
+  {
+   "task_id": "S-01",
+   "name": "Deck layout and level",
+   "trigger": "Staging",
+   "lead": "SL",
+   "phase": "Load-in",
+   "depends_on": [
+    "G-03"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "S-02",
+   "name": "Legs, skirting and stair units",
+   "trigger": "Staging",
+   "lead": "SL",
+   "phase": "Load-in",
+   "depends_on": [
+    "S-01"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "S-03",
+   "name": "Guardrails on every open edge",
+   "trigger": "Staging",
+   "lead": "SL",
+   "phase": "Load-in",
+   "depends_on": [
+    "S-02"
+   ],
+   "note": "MANDATORY at 29 inches or higher. Not a preference."
+  },
+  {
+   "task_id": "S-04",
+   "name": "Podium, furniture and set dressing",
+   "trigger": "Staging",
+   "lead": null,
+   "phase": "Load-in",
+   "depends_on": [
+    "S-02"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "S-05",
+   "name": "Stage strike and pack",
+   "trigger": "Staging",
+   "lead": null,
+   "phase": "Load-out",
+   "depends_on": [],
+   "note": null
+  },
+  {
+   "task_id": "A-01",
+   "name": "PA fly or stack",
+   "trigger": "Audio",
+   "lead": "A1",
+   "phase": "Load-in",
+   "depends_on": [
+    "R-06"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "A-02",
+   "name": "Sub placement",
+   "trigger": "Audio",
+   "lead": "A1",
+   "phase": "Load-in",
+   "depends_on": [
+    "A-01"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "A-03",
+   "name": "Amp and drive rack build, network up",
+   "trigger": "Audio",
+   "lead": "A1",
+   "phase": "Load-in",
+   "depends_on": [
+    "P-04"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "A-04",
+   "name": "FOH console build and patch",
+   "trigger": "Audio",
+   "lead": "A1",
+   "phase": "Load-in",
+   "depends_on": [
+    "A-03"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "A-05",
+   "name": "Monitor world or IEM build",
+   "trigger": "Audio",
+   "lead": "A2",
+   "phase": "Load-in",
+   "depends_on": [
+    "A-03"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "A-06",
+   "name": "Mics, DIs, stands and stage cable",
+   "trigger": "Audio",
+   "lead": null,
+   "phase": "Load-in",
+   "depends_on": [
+    "A-04"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "A-07",
+   "name": "Comms and intercom distribution",
+   "trigger": "Audio",
+   "lead": "A2",
+   "phase": "Load-in",
+   "depends_on": [
+    "A-03"
+   ],
+   "note": "Audio owns it end to end. Video draws from it \u2014 see V-04."
+  },
+  {
+   "task_id": "A-08",
+   "name": "System tune and time align",
+   "trigger": "Audio",
+   "lead": "A1",
+   "phase": "Load-in",
+   "depends_on": [
+    "A-06"
+   ],
+   "note": "No load-out twin."
+  },
+  {
+   "task_id": "A-09",
+   "name": "Line check and soundcheck",
+   "trigger": "Audio",
+   "lead": "A1",
+   "phase": "Show day",
+   "depends_on": [
+    "A-08"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "A-10",
+   "name": "VOG and playback channel check",
+   "trigger": "Audio",
+   "lead": "A1",
+   "phase": "Show day",
+   "depends_on": [
+    "A-09"
+   ],
+   "note": "Produced VOG file must already exist."
+  },
+  {
+   "task_id": "A-11",
+   "name": "Audio strike and case out",
+   "trigger": "Audio",
+   "lead": null,
+   "phase": "Load-out",
+   "depends_on": [],
+   "note": null
+  },
+  {
+   "task_id": "L-01",
+   "name": "Fixture prep and bench check",
+   "trigger": "Lighting",
+   "lead": "LX",
+   "phase": "Load-in",
+   "depends_on": [
+    "G-01"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "L-02",
+   "name": "Floor package position and cable",
+   "trigger": "Lighting",
+   "lead": null,
+   "phase": "Load-in",
+   "depends_on": [
+    "L-01"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "L-03",
+   "name": "Truss fixture hang",
+   "trigger": "Lighting",
+   "lead": "LX",
+   "phase": "Load-in",
+   "depends_on": [
+    "R-03"
+   ],
+   "note": "Happens on deck, before the lift."
+  },
+  {
+   "task_id": "L-04",
+   "name": "Data and power patch",
+   "trigger": "Lighting",
+   "lead": "LX",
+   "phase": "Load-in",
+   "depends_on": [
+    "L-03"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "L-05",
+   "name": "Console build and patch to plot",
+   "trigger": "Lighting",
+   "lead": "LD",
+   "phase": "Load-in",
+   "depends_on": [
+    "L-04"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "L-06",
+   "name": "Focus",
+   "trigger": "Lighting",
+   "lead": "LD",
+   "phase": "Load-in",
+   "depends_on": [
+    "R-06"
+   ],
+   "note": "Needs the truss at trim. No load-out twin."
+  },
+  {
+   "task_id": "L-07",
+   "name": "Programming and cue build",
+   "trigger": "Lighting",
+   "lead": "LD",
+   "phase": "Load-in",
+   "depends_on": [
+    "L-06"
+   ],
+   "note": "No load-out twin."
+  },
+  {
+   "task_id": "L-08",
+   "name": "Followspot positions and comms",
+   "trigger": "Lighting",
+   "lead": null,
+   "phase": "Load-in",
+   "depends_on": [
+    "L-05"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "L-09",
+   "name": "Lighting strike and case out",
+   "trigger": "Lighting",
+   "lead": null,
+   "phase": "Load-out",
+   "depends_on": [
+    "R-07"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "V-01",
+   "name": "Projector position or fly",
+   "trigger": "Video / Projection",
+   "lead": "V1",
+   "phase": "Load-in",
+   "depends_on": [
+    "R-06"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "V-02",
+   "name": "Screen build",
+   "trigger": "Video / Projection",
+   "lead": null,
+   "phase": "Load-in",
+   "depends_on": [
+    "G-03"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "V-03",
+   "name": "Focus, align and blend",
+   "trigger": "Video / Projection",
+   "lead": "V1",
+   "phase": "Load-in",
+   "depends_on": [
+    "V-02"
+   ],
+   "note": "No load-out twin."
+  },
+  {
+   "task_id": "V-04",
+   "name": "Video village build \u2014 switcher and playback",
+   "trigger": "Video / Projection",
+   "lead": "V1",
+   "phase": "Load-in",
+   "depends_on": [
+    "P-04"
+   ],
+   "note": "Comms comes from audio. A-07 first."
+  },
+  {
+   "task_id": "V-05",
+   "name": "Presentation laptops and confidence monitors",
+   "trigger": "Video / Projection",
+   "lead": null,
+   "phase": "Load-in",
+   "depends_on": [
+    "V-04"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "V-06",
+   "name": "Content load and slide QC",
+   "trigger": "Video / Projection",
+   "lead": "V2",
+   "phase": "Load-in",
+   "depends_on": [
+    "V-05"
+   ],
+   "note": "Runs long when decks arrive late. No load-out twin."
+  },
+  {
+   "task_id": "V-07",
+   "name": "Cue to cue with presenters",
+   "trigger": "Video / Projection",
+   "lead": "V1",
+   "phase": "Show day",
+   "depends_on": [
+    "V-06"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "V-08",
+   "name": "Video strike and case out",
+   "trigger": "Video / Projection",
+   "lead": null,
+   "phase": "Load-out",
+   "depends_on": [],
+   "note": null
+  },
+  {
+   "task_id": "E-01",
+   "name": "Stage carts and unpack panels",
+   "trigger": "LED Wall",
+   "lead": null,
+   "phase": "Load-in",
+   "depends_on": [
+    "G-01"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "E-02",
+   "name": "Ground support build",
+   "trigger": "LED Wall",
+   "lead": "SL",
+   "phase": "Load-in",
+   "depends_on": [
+    "E-01"
+   ],
+   "note": "Ground stack only. A flown wall uses E-09 instead."
+  },
+  {
+   "task_id": "E-09",
+   "name": "Flown header build and lift to trim",
+   "trigger": "LED Wall",
+   "lead": "RIG",
+   "phase": "Load-in",
+   "depends_on": [
+    "R-03"
+   ],
+   "note": "Flown wall only. Rigging owns it, not staging."
+  },
+  {
+   "task_id": "E-03",
+   "name": "Panel hang or stack",
+   "trigger": "LED Wall",
+   "lead": null,
+   "phase": "Load-in",
+   "depends_on": [
+    "E-02 / E-09"
+   ],
+   "note": "Whichever of the two is in scope \u2014 never both."
+  },
+  {
+   "task_id": "E-04",
+   "name": "Data and power cabling",
+   "trigger": "LED Wall",
+   "lead": null,
+   "phase": "Load-in",
+   "depends_on": [
+    "E-03"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "E-05",
+   "name": "Processor build and panel mapping",
+   "trigger": "LED Wall",
+   "lead": "V1",
+   "phase": "Load-in",
+   "depends_on": [
+    "E-04"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "E-06",
+   "name": "Power up, colour match, dead pixel check",
+   "trigger": "LED Wall",
+   "lead": "V1",
+   "phase": "Load-in",
+   "depends_on": [
+    "E-05"
+   ],
+   "note": "No load-out twin."
+  },
+  {
+   "task_id": "E-07",
+   "name": "Trim, mask edges and skirt",
+   "trigger": "LED Wall",
+   "lead": null,
+   "phase": "Load-in",
+   "depends_on": [
+    "E-06"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "E-08",
+   "name": "Wall strike, panel count and pack",
+   "trigger": "LED Wall",
+   "lead": null,
+   "phase": "Load-out",
+   "depends_on": [],
+   "note": "Count panels out. A missing panel found in the shop is a bad week."
+  },
+  {
+   "task_id": "C-01",
+   "name": "Camera positions \u2014 risers, tripods, cable",
+   "trigger": "Cameras / IMAG",
+   "lead": null,
+   "phase": "Load-in",
+   "depends_on": [
+    "G-03"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "C-02",
+   "name": "Fibre or SDI runs to video village",
+   "trigger": "Cameras / IMAG",
+   "lead": null,
+   "phase": "Load-in",
+   "depends_on": [
+    "C-01"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "C-03",
+   "name": "Camera comms and tally",
+   "trigger": "Cameras / IMAG",
+   "lead": null,
+   "phase": "Load-in",
+   "depends_on": [
+    "C-02",
+    "A-07"
+   ],
+   "note": "Packs come off the audio loop."
+  },
+  {
+   "task_id": "C-04",
+   "name": "Shading and white balance",
+   "trigger": "Cameras / IMAG",
+   "lead": "V1",
+   "phase": "Show day",
+   "depends_on": [
+    "C-03"
+   ],
+   "note": "No load-out twin."
+  },
+  {
+   "task_id": "C-05",
+   "name": "Camera strike and pack",
+   "trigger": "Cameras / IMAG",
+   "lead": null,
+   "phase": "Load-out",
+   "depends_on": [],
+   "note": null
+  },
+  {
+   "task_id": "T-01",
+   "name": "Confirm house internet or bond cellular",
+   "trigger": "Streaming / Recording",
+   "lead": "PM",
+   "phase": "Load-in",
+   "depends_on": [
+    "G-02"
+   ],
+   "note": "Walkthrough answer says which. Guest wifi is not bandwidth."
+  },
+  {
+   "task_id": "T-02",
+   "name": "Encoder build and bandwidth test",
+   "trigger": "Streaming / Recording",
+   "lead": "V1",
+   "phase": "Load-in",
+   "depends_on": [
+    "T-01"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "T-03",
+   "name": "Platform keys, destinations and dry run",
+   "trigger": "Streaming / Recording",
+   "lead": "V1",
+   "phase": "Load-in",
+   "depends_on": [
+    "T-02"
+   ],
+   "note": "No load-out twin."
+  },
+  {
+   "task_id": "T-04",
+   "name": "Record decks armed and media checked",
+   "trigger": "Streaming / Recording",
+   "lead": null,
+   "phase": "Show day",
+   "depends_on": [
+    "T-02"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "T-05",
+   "name": "Media offload and hand to client",
+   "trigger": "Streaming / Recording",
+   "lead": "V1",
+   "phase": "Load-out",
+   "depends_on": [],
+   "note": "Do not leave the building without this signed off."
+  },
+  {
+   "task_id": "D-01",
+   "name": "Pipe and base set out",
+   "trigger": "Drape / Decor",
+   "lead": null,
+   "phase": "Load-in",
+   "depends_on": [
+    "G-03"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "D-02",
+   "name": "Drape hang and steam",
+   "trigger": "Drape / Decor",
+   "lead": null,
+   "phase": "Load-in",
+   "depends_on": [
+    "D-01"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "D-03",
+   "name": "Masking check from audience sightlines",
+   "trigger": "Drape / Decor",
+   "lead": "PM",
+   "phase": "Load-in",
+   "depends_on": [
+    "D-02"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "D-04",
+   "name": "Drape strike and fold",
+   "trigger": "Drape / Decor",
+   "lead": null,
+   "phase": "Load-out",
+   "depends_on": [],
+   "note": "Fold properly or the shop pays for it later."
+  },
+  {
+   "task_id": "X-01",
+   "name": "Fire marshal inspection and permit on site",
+   "trigger": "Special Effects",
+   "lead": "PM",
+   "phase": "Load-in",
+   "depends_on": [],
+   "note": "Permit must be in the Dropbox folder before the day."
+  },
+  {
+   "task_id": "X-02",
+   "name": "Effect position, safe zone and rigging",
+   "trigger": "Special Effects",
+   "lead": null,
+   "phase": "Load-in",
+   "depends_on": [
+    "X-01"
+   ],
+   "note": null
+  },
+  {
+   "task_id": "X-03",
+   "name": "Test fire with the venue present",
+   "trigger": "Special Effects",
+   "lead": "PM",
+   "phase": "Load-in",
+   "depends_on": [
+    "X-02"
+   ],
+   "note": "No load-out twin."
+  },
+  {
+   "task_id": "X-04",
+   "name": "Effect strike and consumables count",
+   "trigger": "Special Effects",
+   "lead": null,
+   "phase": "Load-out",
+   "depends_on": [],
+   "note": null
+  }
+ ]
+}
