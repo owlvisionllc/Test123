@@ -1,0 +1,17 @@
+# Netlify build config. The two VITE_ vars are already set under
+# Site settings -> Environment variables, so a branch deploy picks up
+# the Supabase credentials without anything being committed here.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Single page app: every path serves index.html so refreshing a
+# deep link does not 404 once there is routing.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
