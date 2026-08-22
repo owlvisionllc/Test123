@@ -88,10 +88,35 @@ Offline is the hard part and it is deliberately last. Build online-only first. T
 
 ## Later, in this order
 
-8. Port Labor onto `labor_quotes` / `labor_days` / `shifts` / `shift_slots` — headcount becomes slots.
-9. Positions screen, from `mockups/owlvision-positions-screen-v0.3.jsx`.
-10. Task templates seeded from `supabase/seed/task-library.json`. **No durations, no crew sizes** — those live on `event_tasks` and the PM fills them in.
-11. Schedule, as a view over task assignments and shift times.
+8. **Labor** onto `labor_quotes` / `labor_days` / `shifts` / `shift_slots` — headcount becomes slots.
+9. **Positions**, from `mockups/owlvision-positions-screen-v0.3.jsx`. Three views over the same rows: fill, by person, by call.
+10. **Tasks**, from `mockups/owlvision-tasks-screen-v0.1.jsx`. Templates seeded from `supabase/seed/task-library.json`. **No durations, no crew sizes on templates** — those live on `event_tasks` and the PM sets them per job.
+11. **Schedule**, from `mockups/owlvision-schedule-screen-v0.3.jsx`.
+
+### About the scheduler
+
+The drafting algorithm in the schedule mockup is finished work, not a sketch. Lift `weights()` and `drafter()` across as they are.
+
+Two things about it that are easy to break by "simplifying":
+
+- **Load-out is not load-in reversed.** Load-in schedules forward from the call and asks when the room is done. Load-out schedules backward from the curfew and asks when work must start — dependencies traverse the other way and tasks pack as late as possible. One `direction` flag switches it, and both paths are needed.
+- **Priority is critical path, not job size.** Each task is weighted by the longest chain that waits on it (forward) or that must precede it (backward). On the sample call sheet this moved the finish from 3:20 PM to 1:50 PM with no extra crew. A naive "biggest job first" sort silently costs 90 minutes.
+
+Pinned tasks are immovable and consume crew before anything else is placed. That is what lets auto and manual coexist instead of being a one-time choice.
+
+### Schema needed for 10 and 11
+
+Not in `0001_schema.sql` yet — the shape is sketched in a comment at the bottom of that file:
+
+```
+task_templates    task_id, name, dept, trigger_scope_key, lead_position,
+                  phase, depends_on[]        -- no duration, no crew_size
+event_tasks       event_id, template_id, name, dept, lead_position,
+                  crew_size, duration_min, phase, depends_on[]
+task_assignments  event_task_id, labor_day_id, start_min, pinned
+```
+
+`start_min` is minutes from midnight and may exceed 1440 — a 2 AM curfew is 1560, so strike stays on the same day it belongs to instead of splitting across two dates.
 
 ---
 

@@ -31,8 +31,10 @@ supabase/
 
 mockups/                  reviewed UI, hardcoded data. Follow the design,
                           replace the arrays.
-  owlvision-portal-dashboard-v0.5.jsx
-  owlvision-positions-screen-v0.3.jsx
+  owlvision-portal-dashboard-v0.5.jsx    dashboard, login, roster, new event
+  owlvision-positions-screen-v0.3.jsx    slots to names, three views
+  owlvision-tasks-screen-v0.1.jsx        scope to work, crew vs capacity
+  owlvision-schedule-screen-v0.3.jsx     running order, both directions
 
 public/                   the owl mark, white, for the dark bar
 docs/                     setup walkthroughs and the task library workbook
