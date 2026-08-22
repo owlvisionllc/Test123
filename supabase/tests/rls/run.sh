@@ -23,7 +23,9 @@ sleep 1
 psql "host=$D user=postgres dbname=postgres" -q -c "create database ov" >/dev/null 2>&1
 for f in "$HERE/shim.sql" \
          "$ROOT/supabase/migrations/0001_schema.sql" \
+         "$HERE/grants.sql" \
          "$ROOT/supabase/migrations/0002_rls_policies.sql" \
+         "$ROOT/supabase/migrations/0003_theme.sql" \
          "$HERE/seed.sql"; do
   if ! psql "host=$D user=postgres dbname=ov" -v ON_ERROR_STOP=1 -q -f "$f" 2>&1 | grep -v NOTICE; then :; fi
 done

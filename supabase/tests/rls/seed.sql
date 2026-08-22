@@ -1,9 +1,3 @@
--- Supabase grants these to the authenticated role; mirror that here
--- or the test would be measuring missing GRANTs, not policies.
-grant usage on schema public to authenticated, anon;
-grant all on all tables in schema public to authenticated;
-grant execute on all functions in schema public to authenticated;
-
 insert into auth.users (id, email) values
   ('11111111-1111-1111-1111-111111111111','david@owlvisionllc.com'),
   ('22222222-2222-2222-2222-222222222222','barry@owlvisionllc.com'),

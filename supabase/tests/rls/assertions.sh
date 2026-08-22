@@ -82,6 +82,16 @@ expect "Barry writes stages on his own event"  $BARRY "insert into event_stages 
 expect "Barry writes stages on Teddy's event"  $BARRY "insert into event_stages (event_id, stage, status) values ('bbbbbbbb-0000-0000-0000-000000000002','intake','in_progress');" deny
 
 echo
+echo "PROFILES — own row only, and never your own role"
+rows "Barry switches his own theme to dark"    $BARRY "with x as (update profiles set theme='dark' where id='$BARRY' returning 1) select count(*) from x;" 1
+rows "the theme actually stuck"                $BARRY "select count(*) from profiles where id='$BARRY' and theme='dark';" 1
+rows "Barry switches Teddy's theme"            $BARRY "with x as (update profiles set theme='dark' where id='33333333-3333-3333-3333-333333333333' returning 1) select count(*) from x;" 0
+expect "Barry promotes himself to admin"       $BARRY "update profiles set role='admin' where id='$BARRY';" deny
+expect "Barry renames himself"                 $BARRY "update profiles set full_name='Barry G' where id='$BARRY';" allow
+expect "Barry deactivates Teddy"               $BARRY "update profiles set active=false where id='33333333-3333-3333-3333-333333333333';" deny
+rows  "...and no row was touched either way"    $BARRY "with x as (update profiles set full_name='x' where id='33333333-3333-3333-3333-333333333333' returning 1) select count(*) from x;" 0
+
+echo
 echo "SHOP — read-only everywhere"
 expect "Shop writes a note"                    $SHOP "insert into intake_notes (event_id, section_key, body) values ('aaaaaaaa-0000-0000-0000-000000000001','power','x');" deny
 expect "Shop adds a slot"                      $SHOP "insert into shift_slots (shift_id, slot_index) values ('a3333333-0000-0000-0000-000000000001',9);" deny

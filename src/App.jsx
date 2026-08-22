@@ -1,89 +1,162 @@
-// Owl Vision PM Portal — App shell  v0.1
+// Owl Vision PM Portal — shell  v0.6
 //
-// Task 0 scaffold. Deliberately blank: the only thing here is the
-// connection probe from TASKS.md, so David can confirm the client
-// reaches Supabase and the schema is seeded before anything is built
-// on top of it. Replaced by the dashboard in task 2.
+// v0.6: real sign-in. The mockup's signedIn boolean is now useSession, the
+// login screen sends a magic link, and the theme follows the profile rather
+// than the tab.
+//
+// Events and roster are still the mock arrays — tasks 3 and 5.
 
 import { useEffect, useState } from "react";
-
-const HAVE_ENV =
-  !!import.meta.env.VITE_SUPABASE_URL && !!import.meta.env.VITE_SUPABASE_ANON_KEY;
+import { sendMagicLink, signOut } from "./lib/supabase";
+import { useSession } from "./lib/useSession";
+import { useTheme } from "./lib/useTheme";
+import { THEMES, ThemeCtx, MONO, SANS } from "./theme";
+import { OwlMark, ThemeToggle } from "./ui";
+import { EVENTS, ROSTER } from "./mockData";
+import Splash from "./screens/Splash";
+import Login from "./screens/Login";
+import Dashboard from "./screens/Dashboard";
+import EventView from "./screens/EventView";
+import Roster from "./screens/Roster";
+import NewEventSheet from "./screens/NewEventSheet";
+import AccountSheet from "./screens/AccountSheet";
 
 export default function App() {
-  const [probe, setProbe] = useState("Checking the connection.");
+  const { profile, loading, role, canCreateEvents, canEditRoster } = useSession();
+  const { mode, toggle, themeError } = useTheme(profile);
+  const T = THEMES[mode];
 
+  const [tab, setTab] = useState("events");
+  const [event, setEvent] = useState(null);
+  const [filter, setFilter] = useState("all");
+  const [events, setEvents] = useState(EVENTS);
+  const [roster, setRoster] = useState(ROSTER);
+  const [creating, setCreating] = useState(false);
+  const [account, setAccount] = useState(false);
+
+  // The viewport behind the 460px column, so the phone's overscroll and the
+  // status bar area match the theme instead of flashing white.
   useEffect(() => {
-    let alive = true;
-    const say = (msg) => alive && setProbe(msg);
+    document.body.style.background = T.shell;
+    document.documentElement.style.colorScheme = mode;
+  }, [T.shell, mode]);
 
-    if (!HAVE_ENV) {
-      const msg =
-        "No Supabase credentials. Put VITE_SUPABASE_URL and " +
-        "VITE_SUPABASE_ANON_KEY in .env.local, then restart the dev server.";
-      console.error(msg);
-      say(msg);
-      return;
-    }
+  const createEvent = (d) => {
+    setEvents([
+      {
+        id: `local-${events.length + 1}`,
+        name: d.name,
+        venue: d.venue,
+        date: d.date || "TBD",
+        dateFull: d.date ? `${d.date}, 2026` : "Date to be set",
+        pm: d.pm,
+        flexQ: d.flexQ || null,
+        flexOpen: false,
+        filed: false,
+        stages: { Intake: "in_progress", Labor: "not_started", Positions: "not_started", Tasks: "not_started", Schedule: "not_started" },
+        blockers: [],
+        detail: { Intake: "0 of 18 sections · just assigned" },
+      },
+      ...events,
+    ]);
+    setCreating(false);
+  };
 
-    // Imported lazily so a missing or wrong URL surfaces as this message
-    // rather than a blank white page from createClient throwing on load.
-    import("./lib/supabase.js")
-      .then(({ supabase }) => supabase.from("positions").select("*"))
-      .then(({ data, error }) => {
-        if (error) throw error;
-        console.log("positions:", data);
-        if (!data?.length) {
-          say(
-            "Connected, but positions is empty. The schema has not been run. " +
-              "Paste supabase/migrations/0001_schema.sql into the SQL editor."
-          );
-          return;
-        }
-        say(`Connected. positions returned ${data.length} rows.`);
-      })
-      .catch((err) => {
-        console.error("positions probe failed", err);
-        say(`Could not read positions. ${err.message || err}`);
-      });
-
-    return () => {
-      alive = false;
-    };
-  }, []);
-
-  return (
-    <main
-      style={{
-        maxWidth: 460,
-        margin: "0 auto",
-        minHeight: "100%",
-        padding: "48px 20px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 20,
-      }}
-    >
-      <img
-        src="/owl-vision-mark.svg"
-        alt=""
-        width={64}
-        height={64}
-        style={{ opacity: 0.9 }}
-      />
-      <p
-        style={{
-          margin: 0,
-          fontFamily: "var(--mono)",
-          fontSize: 13,
-          lineHeight: 1.6,
-          textAlign: "center",
-        }}
-      >
-        {probe}
-      </p>
-    </main>
+  const shell = (children) => (
+    <ThemeCtx.Provider value={T}>
+      <div style={{ background: T.shell, minHeight: "100vh", fontFamily: SANS, transition: "background 180ms ease" }}>
+        <style>{`
+          * { -webkit-tap-highlight-color: transparent; }
+          button:focus-visible, input:focus-visible { outline: 2px solid ${T.bright}; outline-offset: 2px; }
+          input::placeholder { color: ${T.ash}; }
+          @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }`}</style>
+        <div style={{ maxWidth: 460, margin: "0 auto", background: T.paper, minHeight: "100vh", boxShadow: mode === "dark" ? "none" : "0 0 40px rgba(0,0,0,.08)" }}>
+          {children}
+        </div>
+      </div>
+    </ThemeCtx.Provider>
   );
+
+  // Supabase restores the session asynchronously. Show the owl, not the login
+  // screen, or every refresh flashes a sign-in prompt at someone already in.
+  if (loading) return shell(<Splash />);
+
+  if (!profile) return shell(<Login onSend={sendMagicLink} mode={mode} onToggle={toggle} />);
+
+  return shell(
+    <>
+      {!event && (
+        <div style={{ background: T.bar, color: T.barInk, padding: "11px 14px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
+            <OwlMark size={24} color={T.barInk} />
+            <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.16em", color: T.bright }}>PM PORTAL</div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <ThemeToggle mode={mode} onToggle={toggle} />
+            <button
+              onClick={() => setAccount(true)}
+              aria-label="Account"
+              style={{ width: 30, height: 30, borderRadius: "50%", border: "none", background: T.deep, color: T.deepInk, fontFamily: MONO, fontSize: 10.5, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+            >
+              {initials(profile.full_name)}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {themeError && (
+        <div style={{ background: `${T.amber}1F`, borderBottom: `1px solid ${T.amber}55`, color: T.amber, fontFamily: MONO, fontSize: 10.5, lineHeight: 1.5, padding: "8px 14px" }}>
+          {themeError}
+        </div>
+      )}
+
+      {event ? (
+        <EventView event={event} onBack={() => setEvent(null)} mode={mode} onToggle={toggle} />
+      ) : tab === "events" ? (
+        <Dashboard
+          events={events}
+          profile={profile}
+          onOpen={setEvent}
+          filter={filter}
+          setFilter={setFilter}
+          onNew={() => setCreating(true)}
+          canCreate={canCreateEvents}
+        />
+      ) : (
+        <Roster
+          roster={roster}
+          canEdit={canEditRoster}
+          onAdd={(p) => setRoster([{ ...p, pos: p.pos.length ? p.pos : ["HAND"] }, ...roster])}
+        />
+      )}
+
+      {creating && <NewEventSheet onClose={() => setCreating(false)} onCreate={createEvent} />}
+
+      {account && (
+        <AccountSheet
+          profile={profile}
+          role={role}
+          onClose={() => setAccount(false)}
+          onSignOut={signOut}
+        />
+      )}
+
+      {!event && (
+        <div style={{ position: "sticky", bottom: 0, display: "flex", background: T.card, borderTop: `1px solid ${T.line}` }}>
+          {[["events", "Events"], ["roster", "Roster"]].map(([k, l]) => (
+            <button key={k} onClick={() => setTab(k)}
+              style={{ flex: 1, border: "none", background: "transparent", borderTop: `2px solid ${tab === k ? T.green : "transparent"}`, color: tab === k ? T.green : T.ash, fontFamily: MONO, fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase", padding: "14px 0", cursor: "pointer" }}>
+              {l}
+            </button>
+          ))}
+        </div>
+      )}
+    </>
+  );
+}
+
+function initials(name) {
+  if (!name) return "··";
+  const parts = name.trim().split(/\s+/);
+  return ((parts[0]?.[0] || "") + (parts[1]?.[0] || "")).toUpperCase() || "··";
 }
