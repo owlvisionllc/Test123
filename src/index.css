@@ -1,0 +1,44 @@
+/* v0.1 — scaffold only. Screens style themselves with inline styles;
+   this file is the reset, the fonts and the two theme palettes. */
+
+:root {
+  --green: #2DCC52;
+  --deep:  #0F4A20;
+  --red:   #A32B22;
+  --amber: #9A5510;
+
+  --line:  #DCE1DC;
+  --paper: #EFF2EF;
+  --card:  #FFFFFF;
+  --ink:   #0C0F0C;
+
+  --sans: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --line:  #262D27;
+  --paper: #0E110F;
+  --card:  #171B18;
+  --ink:   #EDF1EE;
+
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Numbers are always mono. */
+code, kbd, pre, samp { font-family: var(--mono); }
