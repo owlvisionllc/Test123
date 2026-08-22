@@ -1,18 +1,20 @@
-// Owl Vision PM Portal — shell  v0.6
+// Owl Vision PM Portal — shell  v0.7
 //
+// v0.7: the dashboard reads real events.
 // v0.6: real sign-in. The mockup's signedIn boolean is now useSession, the
 // login screen sends a magic link, and the theme follows the profile rather
 // than the tab.
 //
-// Events and roster are still the mock arrays — tasks 3 and 5.
+// Roster is still the mock array — task 5.
 
 import { useEffect, useState } from "react";
 import { sendMagicLink, signOut } from "./lib/supabase";
 import { useSession } from "./lib/useSession";
 import { useTheme } from "./lib/useTheme";
+import { useEvents } from "./lib/useEvents";
 import { THEMES, ThemeCtx, MONO, SANS } from "./theme";
 import { OwlMark, ThemeToggle } from "./ui";
-import { EVENTS, ROSTER } from "./mockData";
+import { ROSTER } from "./mockData";
 import Splash from "./screens/Splash";
 import Login from "./screens/Login";
 import Dashboard from "./screens/Dashboard";
@@ -24,12 +26,12 @@ import AccountSheet from "./screens/AccountSheet";
 export default function App() {
   const { profile, loading, role, canCreateEvents, canEditRoster } = useSession();
   const { mode, toggle, themeError } = useTheme(profile);
+  const { events, loading: eventsLoading, error: eventsError, reload } = useEvents(!!profile);
   const T = THEMES[mode];
 
   const [tab, setTab] = useState("events");
   const [event, setEvent] = useState(null);
   const [filter, setFilter] = useState("all");
-  const [events, setEvents] = useState(EVENTS);
   const [roster, setRoster] = useState(ROSTER);
   const [creating, setCreating] = useState(false);
   const [account, setAccount] = useState(false);
@@ -41,27 +43,6 @@ export default function App() {
     document.documentElement.style.colorScheme = mode;
   }, [T.shell, mode]);
 
-  const createEvent = (d) => {
-    setEvents([
-      {
-        id: `local-${events.length + 1}`,
-        name: d.name,
-        venue: d.venue,
-        date: d.date || "TBD",
-        dateFull: d.date ? `${d.date}, 2026` : "Date to be set",
-        pm: d.pm,
-        flexQ: d.flexQ || null,
-        flexOpen: false,
-        filed: false,
-        stages: { Intake: "in_progress", Labor: "not_started", Positions: "not_started", Tasks: "not_started", Schedule: "not_started" },
-        blockers: [],
-        detail: { Intake: "0 of 18 sections · just assigned" },
-      },
-      ...events,
-    ]);
-    setCreating(false);
-  };
-
   const shell = (children) => (
     <ThemeCtx.Provider value={T}>
       <div style={{ background: T.shell, minHeight: "100vh", fontFamily: SANS, transition: "background 180ms ease" }}>
@@ -70,7 +51,7 @@ export default function App() {
           button:focus-visible, input:focus-visible { outline: 2px solid ${T.bright}; outline-offset: 2px; }
           input::placeholder { color: ${T.ash}; }
           @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }`}</style>
-        <div style={{ maxWidth: 460, margin: "0 auto", background: T.paper, minHeight: "100vh", boxShadow: mode === "dark" ? "none" : "0 0 40px rgba(0,0,0,.08)" }}>
+        <div style={{ maxWidth: 460, margin: "0 auto", background: T.paper, minHeight: "100vh", display: "flex", flexDirection: "column", boxShadow: mode === "dark" ? "none" : "0 0 40px rgba(0,0,0,.08)" }}>
           {children}
         </div>
       </div>
@@ -110,11 +91,15 @@ export default function App() {
         </div>
       )}
 
+      <div style={{ flex: 1 }}>
       {event ? (
         <EventView event={event} onBack={() => setEvent(null)} mode={mode} onToggle={toggle} />
       ) : tab === "events" ? (
         <Dashboard
           events={events}
+          loading={eventsLoading}
+          error={eventsError}
+          onReload={reload}
           profile={profile}
           onOpen={setEvent}
           filter={filter}
@@ -129,8 +114,9 @@ export default function App() {
           onAdd={(p) => setRoster([{ ...p, pos: p.pos.length ? p.pos : ["HAND"] }, ...roster])}
         />
       )}
+      </div>
 
-      {creating && <NewEventSheet onClose={() => setCreating(false)} onCreate={createEvent} />}
+      {creating && <NewEventSheet onClose={() => setCreating(false)} />}
 
       {account && (
         <AccountSheet

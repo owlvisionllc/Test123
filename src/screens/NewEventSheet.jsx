@@ -1,17 +1,18 @@
-// New event sheet — v0.6
-// Still local only. Task 4 points onCreate at createEvent() and turns the
-// hardcoded PM list into listPMs().
+// New event sheet — v0.7
+// v0.7: save is off. The list behind it is real now, so a sheet that added a
+// card to local state would show an event that quietly disappears on refresh —
+// worse than not saving at all. Task 4 points this at createEvent() and turns
+// the hardcoded PM list into listPMs().
 
 import { useState } from "react";
 import { Field, Sheet } from "../ui";
 import { MONO, SANS, useT } from "../theme";
 
-export default function NewEventSheet({ onClose, onCreate }) {
+export default function NewEventSheet({ onClose }) {
   const T = useT();
   const [d, setD] = useState({ name: "", venue: "", date: "", pm: "Barry G.", flexQ: "" });
-  const ok = d.name.trim().length > 2 && d.venue.trim().length > 1;
   return (
-    <Sheet title="New event" onClose={onClose} onSave={() => onCreate(d)} canSave={ok} saveLabel="Create and assign">
+    <Sheet title="New event" onClose={onClose} onSave={() => {}} canSave={false} saveLabel="Saving arrives in task 4">
       <Field label="Event name" value={d.name} onChange={(v) => setD({ ...d, name: v })} placeholder="Client — Venue" />
       <Field label="Venue" value={d.venue} onChange={(v) => setD({ ...d, venue: v })} placeholder="Menlo Circus Club" />
       <Field label="Event date" value={d.date} onChange={(v) => setD({ ...d, date: v })} placeholder="Nov 12" />
